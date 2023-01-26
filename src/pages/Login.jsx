@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import userLocalStorage from '../hooks/userLocalStorage';
 
 function Login() {
   const MIN_LOGIN = 6;
@@ -7,6 +9,10 @@ function Login() {
     email: '',
     password: '',
   });
+
+  const { setLocalStorage } = userLocalStorage();
+
+  const history = useHistory();
 
   const validateButton = () => {
     const { email, password } = login;
@@ -27,6 +33,11 @@ function Login() {
       ...login,
       [name]: value,
     });
+  };
+
+  const handleSubmit = () => {
+    setLocalStorage('user', { email: login.email });
+    history.push('/meals');
   };
 
   return (
@@ -54,6 +65,7 @@ function Login() {
         type="button"
         data-testid="login-submit-btn"
         disabled={ validateButton() }
+        onClick={ handleSubmit }
       >
         Enter
       </button>
