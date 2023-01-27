@@ -34,7 +34,6 @@ function Login() {
       [name]: value,
     });
   };
-
   const handleSubmit = () => {
     setLocalStorage('user', { email: login.email });
     history.push('/meals');
