@@ -49,6 +49,7 @@ describe('Testes para Login', () => {
     userEvent.type(inputEmail, emailTest);
     userEvent.type(inputPassword, '123456789');
     userEvent.click(buttonLogin);
+
     expect(historyTest.location.pathname).toBe('/meals');
   });
 });
