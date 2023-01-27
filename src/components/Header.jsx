@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
@@ -11,6 +11,7 @@ function Header() {
   const titleUpperLocation = titleLocation[0].toUpperCase()
    + titleLocation.substring(1).replace('-', ' ') */
   const [title, setTitle] = useState('Meals');
+  const history = useHistory();
 
   useEffect(() => {
     const { pathname } = location;
@@ -37,7 +38,7 @@ function Header() {
   return (
     <div>
 
-      <button type="button">
+      <button type="button" onClick={ () => history.push('/profile') }>
         <img data-testid="profile-top-btn" src={ profileIcon } alt="profile pic" />
       </button>
       {/* <h2>{location.match.params}</h2> */}
