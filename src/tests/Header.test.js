@@ -36,6 +36,12 @@ describe('Testes para o Header', () => {
   });
 
   test('Verifica a rota "/profile"', () => {
+    const setLocalStorage = (id, data) => {
+      window.localStorage.setItem(id, JSON.stringify(data));
+    };
+    const mockKey = 'user';
+    const mockJson = { email: 'trybe@trybe.com' };
+    setLocalStorage(mockKey, mockJson);
     const component = renderWithRouter(<App />, '/profile');
     const historyTeste = component.history;
     const iconElementProfile = screen.getByTestId(testIDProfile);
