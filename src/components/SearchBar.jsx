@@ -7,7 +7,7 @@ function SearchBar() {
   const [searchBar, setSearchBar] = useState({
     inputSearch: false, inputText: '', searchFilter: '' });
   const location = useLocation();
-  const { performFetchMeals, performFetchDrinks } = useFetch();
+  const { performFetchSearchFilter } = useFetch();
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
@@ -22,9 +22,9 @@ function SearchBar() {
     const { inputText, searchFilter } = searchBar;
     let responseFetch = '';
     if (pathname === '/meals') {
-      responseFetch = await performFetchMeals(inputText, searchFilter);
-    } else if (pathname === '/drinks') {
-      responseFetch = await performFetchDrinks(inputText, searchFilter);
+      responseFetch = await performFetchSearchFilter('https://www.themealdb.com/api/json/v1/1/', inputText, searchFilter);
+    } else {
+      responseFetch = await performFetchSearchFilter('https://www.thecocktaildb.com/api/json/v1/1/', inputText, searchFilter);
     }
     console.log(responseFetch);
   };
