@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import searchIcon from '../images/searchIcon.svg';
 
@@ -8,6 +8,7 @@ function SearchBar() {
     inputSearch: false, inputText: '', searchFilter: '' });
   const location = useLocation();
   const { performFetchSearchFilter } = useFetch();
+  const history = useHistory();
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
@@ -20,13 +21,19 @@ function SearchBar() {
   const handleFilter = async () => {
     const { pathname } = location;
     const { inputText, searchFilter } = searchBar;
-    let responseFetch = '';
+    let responseFetch = {};
     if (pathname === '/meals') {
-      responseFetch = await performFetchSearchFilter('https://www.themealdb.com/api/json/v1/1/', inputText, searchFilter);
+      responseFetch = await performFetchSearchFilter('https://www.themealdb.com/api/json/v1/1/', inputText, searchFilter) || { meals: [] };
+      if (responseFetch.meals.length === 1) {
+        history.push(`/meals/${responseFetch.meals[0].idMeal}`);
+      }
     } else {
-      responseFetch = await performFetchSearchFilter('https://www.thecocktaildb.com/api/json/v1/1/', inputText, searchFilter);
+      responseFetch = await performFetchSearchFilter('https://www.thecocktaildb.com/api/json/v1/1/', inputText, searchFilter) || { drinks: [] };
+      console.log(responseFetch);
+      if (responseFetch.drinks.length === 1) {
+        history.push(`/drinks/${responseFetch.drinks[0].idDrink}`);
+      }
     }
-    console.log(responseFetch);
   };
 
   return (
