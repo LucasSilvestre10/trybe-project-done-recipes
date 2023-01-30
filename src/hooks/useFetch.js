@@ -38,10 +38,19 @@ function useFetch() {
     return apiResponse;
   };
 
+  const performFetchRecommendation = async (url) => {
+    setIsLoading(true);
+    const response = await fetch(`${url}`);
+    const apiResponse = await response.json();
+    setIsLoading(false);
+    return apiResponse;
+  };
+
   return {
     isLoading,
     performFetchSearchFilter,
     performFetchReceipeDetail,
+    performFetchRecommendation,
   };
 }
 

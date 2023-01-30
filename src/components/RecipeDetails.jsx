@@ -7,14 +7,20 @@ function RecipeDetails() {
   const { pathname } = location;
   const match = useRouteMatch();
   const { params: { id } } = match;
-  const { performFetchReceipeDetail } = useFetch();
+  const { performFetchReceipeDetail, performFetchRecommendation } = useFetch();
   const [receipeDetail, setReceipeDetail] = useState({});
+  const [recommendationDetail, setRecommendationDetail] = useState(null);
   let ingredientGlobal = [];
   let measureGlobal = [];
 
   useEffect(() => {
     const didMountFetch = async (url, idMount) => {
       setReceipeDetail(await performFetchReceipeDetail(url, idMount));
+      if (pathname.includes('/meals')) {
+        setRecommendationDetail(await performFetchRecommendation('https://www.thecocktaildb.com/api/json/v1/1/search.php?s='));
+      } else {
+        setRecommendationDetail(await performFetchRecommendation('https://www.themealdb.com/api/json/v1/1/search.php?s='));
+      }
     };
 
     if (pathname.includes('/meals')) {
@@ -48,6 +54,7 @@ function RecipeDetails() {
     // console.log(ingredients);category
     ingredientGlobal = ingredients;
     measureGlobal = measureValue;
+    console.log(recommendationDetail);
   }
 
   return (
