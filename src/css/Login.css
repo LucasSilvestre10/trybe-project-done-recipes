@@ -5,9 +5,7 @@
 }
 
 .login-container {
-
-  /* stylelint-disable-next-line function-url-quotes */
-  background-image: url(https://previews.123rf.com/images/annapustynnikova/annapustynnikova1511/annapustynnikova151100471/47637600-verduras-frescas-con-el-tel%C3%A9fono-celular-m%C3%B3vil-sobre-un-fondo-de-madera-cope-espacio-de-texto-.jpg);
+  background-image: url('https://previews.123rf.com/images/annapustynnikova/annapustynnikova1511/annapustynnikova151100471/47637600-verduras-frescas-con-el-tel%C3%A9fono-celular-m%C3%B3vil-sobre-un-fondo-de-madera-cope-espacio-de-texto-.jpg');
   display: flex;
   flex-direction: column;
   height: 100%;
