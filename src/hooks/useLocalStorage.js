@@ -1,7 +1,5 @@
-function userLocalStorage() {
-  const getLocalStorage = () => {
-    console.log('vou ser deixado de lado');
-  };
+function useLocalStorage() {
+  const getLocalStorage = (key) => JSON.parse(localStorage.getItem(key));
 
   const setLocalStorage = (key, value) => {
     switch (key) {
@@ -15,10 +13,15 @@ function userLocalStorage() {
     }
   };
 
+  const clearLocalStorage = () => {
+    localStorage.clear();
+  };
+
   return {
     setLocalStorage,
     getLocalStorage,
+    clearLocalStorage,
   };
 }
 
-export default userLocalStorage;
+export default useLocalStorage;

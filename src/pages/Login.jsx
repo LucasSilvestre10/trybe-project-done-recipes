@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import userLocalStorage from '../hooks/userLocalStorage';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 function Login() {
   const MIN_LOGIN = 6;
@@ -10,7 +10,7 @@ function Login() {
     password: '',
   });
 
-  const { setLocalStorage } = userLocalStorage();
+  const { setLocalStorage } = useLocalStorage();
 
   const history = useHistory();
 
