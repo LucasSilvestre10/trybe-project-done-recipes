@@ -30,9 +30,18 @@ function useFetch() {
     return objectResponse;
   };
 
+  const performFetchReceipeDetail = async (url, id) => {
+    setIsLoading(true);
+    const response = await fetch(`${url}${id}`);
+    const apiResponse = await response.json();
+    setIsLoading(false);
+    return apiResponse;
+  };
+
   return {
     isLoading,
     performFetchSearchFilter,
+    performFetchReceipeDetail,
   };
 }
 
