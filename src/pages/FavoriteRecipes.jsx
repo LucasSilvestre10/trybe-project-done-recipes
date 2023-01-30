@@ -6,9 +6,7 @@ function FavoriteRecipes() {
   return (
     <>
       <Header />
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </>
   );
 }

@@ -6,9 +6,7 @@ function Meals() {
   return (
     <>
       <Header />
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </>
   );
 }

@@ -6,9 +6,7 @@ function DoneRecipes() {
   return (
     <>
       <Header />
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </>
   );
 }

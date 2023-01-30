@@ -6,9 +6,7 @@ function Profile() {
   return (
     <>
       <Header />
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </>
 
   );

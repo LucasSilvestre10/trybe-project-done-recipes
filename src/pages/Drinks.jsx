@@ -6,9 +6,7 @@ function Drinks() {
   return (
     <>
       <Header />
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </>
   );
 }
