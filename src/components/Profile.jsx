@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../hooks/useLocalStorage';
+//
 
 function Profile() {
   const [profile, setProfile] = useState({ email: 'Sem Email cadastrado' });
