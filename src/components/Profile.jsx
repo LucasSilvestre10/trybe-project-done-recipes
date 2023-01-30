@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 function Profile() {
-  const [profile, setProfile] = useState({ email: '' });
+  const [profile, setProfile] = useState({ email: 'Sem Email cadastrado' });
   const history = useHistory();
 
   const { getLocalStorage, clearLocalStorage } = useLocalStorage();

@@ -10,6 +10,7 @@ describe('teste do component de Profile', () => {
     const setLocalStorage = (id, data) => {
       window.localStorage.setItem(id, JSON.stringify(data));
     };
+
     const mockKey = 'user';
     const mockJson = { email: 'trybe@trybe.com' };
     setLocalStorage(mockKey, mockJson);
@@ -31,7 +32,18 @@ describe('teste do component de Profile', () => {
     const buttonFavoriteRecipes = screen.getByTestId('profile-logout-btn');
     userEvent.click(buttonFavoriteRecipes);
     expect(historyTeste.location.pathname).toBe('/');
-    /* const allItems = window.localStorage.length();
-    console.log(allItems); */
+  });
+  test('teste se ao clicar no botão de Logout direciona para a tela corretamente e limpa o localStorage', () => {
+    const buttonFavoriteRecipes = screen.getByTestId('profile-logout-btn');
+    userEvent.click(buttonFavoriteRecipes);
+    expect(historyTeste.location.pathname).toBe('/');
+  });
+});
+
+describe('teste de header sem localStorage', () => {
+  test('testa se não houver localStorage renderiza um campo com texto Sem Email cadastrado', async () => {
+    renderWithRouter(<App />, '/profile');
+    const elementEmail = screen.getByTestId('profile-email');
+    expect(elementEmail).toHaveTextContent('Sem Email cadastrado');
   });
 });
