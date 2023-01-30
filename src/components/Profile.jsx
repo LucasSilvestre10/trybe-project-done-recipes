@@ -10,10 +10,13 @@ function Profile() {
   const { getLocalStorage, clearLocalStorage } = useLocalStorage();
   useEffect(() => {
     const result = getLocalStorage('user');
-    setProfile({
-      ...profile,
-      email: result.email,
-    });
+
+    if (result) {
+      setProfile({
+        ...profile,
+        email: result.email,
+      });
+    }
   }, []);
 
   const logout = () => {
