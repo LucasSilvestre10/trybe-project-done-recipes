@@ -9,8 +9,8 @@ function Recipes() {
   // const history = useHistory();
   const [receipes, setReceipes] = useState([]);
   const [keyPage, setKeyPage] = useState('meals');
-  const [filters, setFilters] = useState([]);
-  const { fetchAllRecipes, fetchCategoris } = useFetch();
+  const [filtersCategorys, setFiltersCategorys] = useState([]);
+  const { fetchAllRecipes, fetchCategoris, getRecipesByCategory } = useFetch();
 
   const getRecipes = async () => {
     const result = await fetchAllRecipes(location.pathname);
@@ -30,7 +30,7 @@ function Recipes() {
     for (let index = 0; index < MAX_LENG; index += 1) {
       newResult.push(result[index]);
     }
-    setFilters(
+    setFiltersCategorys(
       newResult,
     );
   };
@@ -54,23 +54,36 @@ function Recipes() {
     }
   }, [receipes]);
 
+  const setFilter = async (event) => {
+    const { innerText } = event.target;
+    const result = await getRecipesByCategory(location.pathname, innerText);
+
+    setReceipes(result);
+  };
+
   return (
     <div className="recipes-cards">
-      <div id="filters" data-testid="filters">
-        {
-          filters.map((filter, index) => (
-            <p
-              key={ index }
-              data-testid={ `${filter.strCategory}-category-filter` }
+      <button
+        className="recipes-category-btn"
+        data-testid="All-category-filter"
+        onClick={ setFilter }
+      >
+        All
 
-            >
-              {filter.strCategory}
+      </button>
+      {
+        filtersCategorys.map((filter, index) => (
+          <button
+            className="recipes-category-btn"
+            key={ `${filter.strCategory}-${index}` }
+            data-testid={ `${filter.strCategory}-category-filter` }
+            onClick={ setFilter }
+          >
+            {filter.strCategory}
 
-            </p>
-
-          ))
-        }
-      </div>
+          </button>
+        ))
+      }
       {receipes.map((receipe, index) => (
         <div
           className="recipes-container"
