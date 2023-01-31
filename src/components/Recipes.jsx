@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import '../css/Recipes.css';
 
 function Recipes() {
   const location = useLocation();
-  // const history = useHistory();
+  const history = useHistory();
   const [receipes, setReceipes] = useState([]);
   const [keyPage, setKeyPage] = useState('meals');
+  const [selectedFilter, setSelectedFilter] = useState('');
   const [filtersCategorys, setFiltersCategorys] = useState([]);
   const { fetchAllRecipes, fetchCategoris, getRecipesByCategory } = useFetch();
 
@@ -56,9 +57,19 @@ function Recipes() {
 
   const setFilter = async (event) => {
     const { innerText } = event.target;
-    const result = await getRecipesByCategory(location.pathname, innerText);
+    const result = await getRecipesByCategory(
+      location.pathname,
+      innerText,
+      selectedFilter,
+    );
 
     setReceipes(result);
+    setSelectedFilter(innerText);
+  };
+
+  const goToDetails = (event) => {
+    const { id } = event.target;
+    history.push(`${location.pathname}/${id}`);
   };
 
   return (
@@ -87,21 +98,27 @@ function Recipes() {
       {receipes.map((receipe, index) => (
         <div
           className="recipes-container"
-          key={ receipe.index }
+          key={ receipe[`id${keyPage}`] }
           data-testid={ `${index}-recipe-card` }
         >
-          <img
-            className="recipes-img"
-            src={ receipe[`str${keyPage}Thumb`] }
-            alt=""
-            data-testid={ `${index}-card-img` }
-          />
-          <p
-            className="recipes-name"
-            data-testid={ `${index}-card-name` }
+          <button
+            onClick={ (event) => goToDetails(event) }
           >
-            {receipe[`str${keyPage}`]}
-          </p>
+
+            <img
+              id={ receipe[`id${keyPage}`] }
+              className="recipes-img"
+              src={ receipe[`str${keyPage}Thumb`] }
+              alt=""
+              data-testid={ `${index}-card-img` }
+            />
+            <p
+              className="recipes-name"
+              data-testid={ `${index}-card-name` }
+            >
+              {receipe[`str${keyPage}`]}
+            </p>
+          </button>
         </div>
       ))}
     </div>

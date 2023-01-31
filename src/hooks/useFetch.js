@@ -70,7 +70,7 @@ function useFetch() {
     return result;
   };
 
-  const getRecipesByCategory = async (page, category) => {
+  const getRecipesByCategory = async (page, category, selectedFilter) => {
     let domain = '';
     let url = '';
 
@@ -84,7 +84,7 @@ function useFetch() {
     default:
       break;
     }
-    url = category === 'All'
+    url = category === 'All' || category === selectedFilter
       ? `https://www.${domain}db.com/api/json/v1/1/search.php?s=`
       : `https://www.${domain}db.com/api/json/v1/1/filter.php?c=${category}`;
     const response = await (await fetch(url)).json();
