@@ -30,9 +30,31 @@ function useFetch() {
     return objectResponse;
   };
 
+  const fetchAll = async (page) => {
+    let url = '';
+
+    switch (page) {
+    case '/meals':
+      url = 'themeal';
+      break;
+    case '/drinks':
+      url = 'thecocktail';
+      break;
+    default:
+      break;
+    }
+
+    const response = await (await fetch(`https://www.${url}db.com/api/json/v1/1/search.php?s=`)).json();
+    const key = page.replace('/', '');
+    const result = response[key];
+    console.log(result);
+    return result;
+  };
+
   return {
     isLoading,
     performFetchSearchFilter,
+    fetchAll,
   };
 }
 
