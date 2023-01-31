@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation, useRouteMatch, useHistory } from 'react-router-dom';
 import { Carousel } from 'react-bootstrap';
 import useFetch from '../hooks/useFetch';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 function RecipeDetails() {
   const location = useLocation();
+  const history = useHistory();
   const { pathname } = location;
   const match = useRouteMatch();
   const { params: { id } } = match;
@@ -77,6 +78,7 @@ function RecipeDetails() {
     setConditionStartRecipe(!doneRecipesArray.some((recipe) => recipe.id === id));
     checkInProgressRecipe();
   }, []);
+
   if (Object.keys(receipeDetail).length !== 0 && receipeDetail.meals) {
     const measureArray = (Object.entries(receipeDetail.meals[0]))
       .filter((chave) => chave[0].includes('strMeasure')).filter((valor) => valor[1]);
@@ -104,7 +106,6 @@ function RecipeDetails() {
       {(pathname.includes('/meals') && Object.keys(receipeDetail).length !== 0) && (
         receipeDetail.meals.map((receipe) => (
           <div key={ id }>
-
             <img
               src={ receipe.strMealThumb }
               alt={ receipe.strMeal }
@@ -128,13 +129,11 @@ function RecipeDetails() {
                 </li>
               </ul>
             ))}
-
             <p data-testid="instructions">
               Instruções:
               {' '}
               { receipe.strInstructions }
             </p>
-
             <iframe
               width="853"
               height="480"
@@ -149,21 +148,16 @@ function RecipeDetails() {
           </div>
         ))
       )}
-
       {(pathname.includes('/drinks') && Object.keys(receipeDetail).length !== 0) && (
         receipeDetail.drinks.map((receipe) => (
           <div key={ id }>
-
             <img
               src={ receipe.strDrinkThumb }
               alt={ receipe.strDrink }
               data-testid="recipe-photo"
             />
-
             <h1 data-testid="recipe-title">{ receipe.strDrink }</h1>
-
             <h2 data-testid="recipe-category">{ receipe.strAlcoholic }</h2>
-
             {ingredientGlobal.map((ingrediente, index) => (
               <ul key={ index } data-testid={ `${index}-ingredient-name-and-measure` }>
                 <li>
@@ -177,7 +171,6 @@ function RecipeDetails() {
                 </li>
               </ul>
             ))}
-
             <p data-testid="instructions">
               Instruções:
               {' '}
@@ -226,11 +219,14 @@ function RecipeDetails() {
           ))}
         </Carousel>
       )}
+      <button type="button" data-testid="share-btn">Compartilhar</button>
+      <button type="button" data-testid="favorite-btn">Favoritar</button>
       {conditionStartRecipe && (
         <button
           className="Start-Recipe-detail"
           type="button"
           data-testid="start-recipe-btn"
+          onClick={ () => history.push(`${pathname}/in-progress`) }
         >
           {conditionInProgressRecipe ? 'Continue Recipe' : 'Start Recipe'}
         </button>
@@ -238,5 +234,4 @@ function RecipeDetails() {
     </div>
   );
 }
-
 export default RecipeDetails;
