@@ -16,9 +16,21 @@ function RecipeDetails() {
   let measureGlobal = [];
   const NUMBER_RECOMMENDED = 6;
   const NUMBER_VISIBLE = 2;
-  console.log(id);
   const { getLocalStorage } = useLocalStorage();
   const [conditionStartRecipe, setConditionStartRecipe] = useState(true);
+  const [conditionInProgressRecipe, setConditionInProgressRecipe] = useState(false);
+  const checkInProgressRecipe = () => {
+    const inProgressRecipesObject = getLocalStorage('inProgressRecipes')
+    || { drinks: {}, meals: {} };
+    console.log(inProgressRecipesObject);
+    if (pathname.includes('/meals') && inProgressRecipesObject.meals) {
+      setConditionInProgressRecipe((Object.keys(inProgressRecipesObject.meals))
+        .some((progress) => progress === id));
+    } else if (pathname.includes('/drinks') && inProgressRecipesObject.drinks) {
+      setConditionInProgressRecipe((Object.keys(inProgressRecipesObject.drinks))
+        .some((progress) => progress === id));
+    }
+  };
 
   useEffect(() => {
     const didMountFetch = async (url, idMount) => {
@@ -28,7 +40,6 @@ function RecipeDetails() {
         const recommendationGeneral = recommendationResponse.drinks
           .filter((recommend, index) => index < NUMBER_RECOMMENDED)
           .map((recommend, index) => ({ ...recommend, recipeId: index }));
-
         const recommendationOnePart = recommendationGeneral
           .filter((recommend, index) => index < NUMBER_VISIBLE);
         const recommendationTwoPart = recommendationGeneral
@@ -37,7 +48,6 @@ function RecipeDetails() {
         const recommendationThreePart = recommendationGeneral
           .filter((recommend, index) => index >= NUMBER_VISIBLE * NUMBER_VISIBLE
           && index < NUMBER_RECOMMENDED);
-
         setRecommendationDetail([recommendationOnePart,
           recommendationTwoPart, recommendationThreePart]);
       } else {
@@ -45,7 +55,6 @@ function RecipeDetails() {
         const recommendationGeneral = recommendationResponse.meals
           .filter((recommend, index) => index < NUMBER_RECOMMENDED)
           .map((recommend, index) => ({ ...recommend, recipeId: index }));
-
         const recommendationOnePart = recommendationGeneral
           .filter((recommend, index) => index < NUMBER_VISIBLE);
         const recommendationTwoPart = recommendationGeneral
@@ -54,7 +63,6 @@ function RecipeDetails() {
         const recommendationThreePart = recommendationGeneral
           .filter((recommend, index) => index >= NUMBER_VISIBLE * NUMBER_VISIBLE
           && index < NUMBER_RECOMMENDED);
-
         setRecommendationDetail([recommendationOnePart,
           recommendationTwoPart, recommendationThreePart]);
       }
@@ -67,36 +75,30 @@ function RecipeDetails() {
     }
     const doneRecipesArray = getLocalStorage('doneRecipes') || [];
     setConditionStartRecipe(!doneRecipesArray.some((recipe) => recipe.id === id));
+    checkInProgressRecipe();
   }, []);
-
   if (Object.keys(receipeDetail).length !== 0 && receipeDetail.meals) {
     const measureArray = (Object.entries(receipeDetail.meals[0]))
       .filter((chave) => chave[0].includes('strMeasure')).filter((valor) => valor[1]);
-
     const measureValue = measureArray.map((measure) => measure[1]);
-
     const ingredients = (Object.entries(receipeDetail.meals[0]))
       .filter((chave) => chave[0].includes('strIngredient'))
       .filter((_receipe, index) => index < measureArray.length)
       .map((ingredient) => ingredient[1]);
-
     ingredientGlobal = ingredients;
     measureGlobal = measureValue;
   } else if (Object.keys(receipeDetail).length !== 0 && receipeDetail.drinks) {
     const measureArray = (Object.entries(receipeDetail.drinks[0]))
       .filter((chave) => chave[0].includes('strMeasure')).filter((valor) => valor[1]);
     const measureValue = measureArray.map((measure) => measure[1]);
-
     const ingredients = (Object.entries(receipeDetail.drinks[0]))
       .filter((chave) => chave[0].includes('strIngredient'))
       .filter((_receipe, index) => index < measureArray.length)
       .map((ingredient) => ingredient[1]);
-
     ingredientGlobal = ingredients;
     measureGlobal = measureValue;
     console.log(recommendationDetail);
   }
-
   return (
     <div>
       {(pathname.includes('/meals') && Object.keys(receipeDetail).length !== 0) && (
@@ -230,7 +232,7 @@ function RecipeDetails() {
           type="button"
           data-testid="start-recipe-btn"
         >
-          Start Recipe
+          {conditionInProgressRecipe ? 'Continue Recipe' : 'Start Recipe'}
         </button>
       )}
     </div>
