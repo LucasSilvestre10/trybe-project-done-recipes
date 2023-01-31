@@ -30,7 +30,7 @@ function useFetch() {
     return objectResponse;
   };
 
-  const fetchAll = async (page) => {
+  const fetchAllRecipes = async (page) => {
     let url = '';
 
     switch (page) {
@@ -47,14 +47,34 @@ function useFetch() {
     const response = await (await fetch(`https://www.${url}db.com/api/json/v1/1/search.php?s=`)).json();
     const key = page.replace('/', '');
     const result = response[key];
-    console.log(result);
+    return result;
+  };
+
+  const fetchCategoris = async (page) => {
+    let url = '';
+
+    switch (page) {
+    case '/meals':
+      url = 'themeal';
+      break;
+    case '/drinks':
+      url = 'thecocktail';
+      break;
+    default:
+      break;
+    }
+    const response = await (await fetch(`https://www.${url}db.com/api/json/v1/1/list.php?c=list`)).json();
+    const key = page.replace('/', '');
+    const result = response[key];
+
     return result;
   };
 
   return {
     isLoading,
     performFetchSearchFilter,
-    fetchAll,
+    fetchAllRecipes,
+    fetchCategoris,
   };
 }
 
