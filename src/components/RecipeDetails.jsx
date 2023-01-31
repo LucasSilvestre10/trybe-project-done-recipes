@@ -219,6 +219,13 @@ function RecipeDetails() {
           ))}
         </Carousel>
       )}
+      <button
+        className="Start-Recipe-detail"
+        type="button"
+        data-testid="start-recipe-btn"
+      >
+        Start Recipe
+      </button>
     </div>
   );
 }
