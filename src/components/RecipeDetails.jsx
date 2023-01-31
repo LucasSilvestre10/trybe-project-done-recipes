@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useRouteMatch } from 'react-router-dom';
 import { Carousel } from 'react-bootstrap';
 import useFetch from '../hooks/useFetch';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 function RecipeDetails() {
   const location = useLocation();
@@ -16,6 +17,8 @@ function RecipeDetails() {
   const NUMBER_RECOMMENDED = 6;
   const NUMBER_VISIBLE = 2;
   console.log(id);
+  const { getLocalStorage } = useLocalStorage();
+  const [conditionStartRecipe, setConditionStartRecipe] = useState(true);
 
   useEffect(() => {
     const didMountFetch = async (url, idMount) => {
@@ -62,6 +65,8 @@ function RecipeDetails() {
     } else {
       didMountFetch('https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=', id);
     }
+    const doneRecipesArray = getLocalStorage('doneRecipes') || [];
+    setConditionStartRecipe(!doneRecipesArray.some((recipe) => recipe.id === id));
   }, []);
 
   if (Object.keys(receipeDetail).length !== 0 && receipeDetail.meals) {
@@ -219,13 +224,15 @@ function RecipeDetails() {
           ))}
         </Carousel>
       )}
-      <button
-        className="Start-Recipe-detail"
-        type="button"
-        data-testid="start-recipe-btn"
-      >
-        Start Recipe
-      </button>
+      {conditionStartRecipe && (
+        <button
+          className="Start-Recipe-detail"
+          type="button"
+          data-testid="start-recipe-btn"
+        >
+          Start Recipe
+        </button>
+      )}
     </div>
   );
 }

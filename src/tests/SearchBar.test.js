@@ -5,6 +5,8 @@ import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
 import soupMock from './mocks/soupMock';
 import ginMock from './mocks/ginMock';
+import oneMealMock from './mocks/oneMealMock';
+import oneDrinkMock from './mocks/oneDrinkMock';
 
 const testIDSearch = 'search-top-btn';
 const testIDSearchInput = 'search-input';
@@ -178,7 +180,9 @@ describe('Verificar SearchBar', () => {
   test('Verificar se há roteamento para a página de detalhes caso apenas um meal é descoberto', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue({ meals: [{ idMeal: 52771 }] }),
+      json: jest.fn().mockResolvedValueOnce({ meals: oneMealMock })
+        .mockResolvedValueOnce({ meals: oneMealMock })
+        .mockResolvedValue({ drinks: ginMock }),
     });
     const { history } = renderWithRouter(<App />, '/meals');
     const searchTopBtn = screen.getByTestId(testIDSearch);
@@ -196,7 +200,9 @@ describe('Verificar SearchBar', () => {
   test('Verificar se há roteamento para a página de detalhes caso apenas um drink é descoberto', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue({ drinks: [{ idDrink: 178319 }] }),
+      json: jest.fn().mockResolvedValueOnce({ drinks: oneDrinkMock })
+        .mockResolvedValueOnce({ drinks: oneDrinkMock })
+        .mockResolvedValue({ meals: soupMock }),
     });
     const { history } = renderWithRouter(<App />, '/drinks');
     const searchTopBtn = screen.getByTestId(testIDSearch);
