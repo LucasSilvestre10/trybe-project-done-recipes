@@ -43,17 +43,6 @@ function Recipes() {
 
   useEffect(() => {
     const page = location.pathname;
-    /* switch (page) {
-    case '/meals':
-      setKeyPage('Meal');
-      break;
-    case '/drinks':
-      setKeyPage('Drink');
-      break;
-    default:
-    break;
-    }
-    */
     if (page === '/meals') {
       setKeyPage('Meal');
     }
