@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import copy from 'clipboard-copy';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 function DetailsButtons({ state }) {
@@ -11,11 +13,23 @@ function DetailsButtons({ state }) {
   const [copied, setCopied] = useState(false);
   const { receipeDetail } = state;
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
+  const [favorite, setFavorite] = useState(false);
 
   const handleShare = () => {
     copy(`http://localhost:3000${pathname}`);
     setCopied(true);
   };
+
+  useEffect(() => {
+    const actualStorage = getLocalStorage('favoriteRecipes') || [];
+    if (receipeDetail.meals) {
+      setFavorite(actualStorage
+        .some((receipeStorage) => receipeStorage.id === receipeDetail.meals[0].idMeal));
+    } else if (receipeDetail.drinks) {
+      setFavorite(actualStorage
+        .some((receipeStorage) => receipeStorage.id === receipeDetail.drinks[0].idDrink));
+    }
+  }, [receipeDetail]);
 
   const handleSaveStorage = () => {
     const oldStorage = getLocalStorage('favoriteRecipes') || [];
@@ -43,6 +57,7 @@ function DetailsButtons({ state }) {
     }
     const actualStorage = [...oldStorage, objetoAtualRecipe];
     setLocalStorage('favoriteRecipes', actualStorage);
+    setFavorite(true);
   };
 
   return (
@@ -57,10 +72,22 @@ function DetailsButtons({ state }) {
 
       <button
         type="button"
-        data-testid="favorite-btn"
+        // data-testid="favorite-btn"
         onClick={ handleSaveStorage }
       >
-        Favoritar
+        {favorite ? (
+          <img
+            data-testid="favorite-btn"
+            src={ blackHeartIcon }
+            alt="Favorito"
+          />)
+          : (
+            <img
+              data-testid="favorite-btn"
+              src={ whiteHeartIcon }
+              alt="Não Favorito"
+            />
+          )}
       </button>
     </>
   );
