@@ -37,7 +37,6 @@ function RecipeDetails() {
   useEffect(() => {
     const didMountFetch = async (url, idMount) => {
       setReceipeDetail(await performFetchReceipeDetail(url, idMount));
-
       if (pathname.includes('/meals')) {
         const recommendationResponse = await performFetchRecommendation('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const recommendationGeneral = recommendationResponse.drinks
@@ -70,7 +69,6 @@ function RecipeDetails() {
           recommendationTwoPart, recommendationThreePart]);
       }
     };
-
     if (pathname.includes('/meals')) {
       didMountFetch('https://www.themealdb.com/api/json/v1/1/lookup.php?i=', id);
     } else {
@@ -80,7 +78,6 @@ function RecipeDetails() {
     setConditionStartRecipe(!doneRecipesArray.some((recipe) => recipe.id === id));
     checkInProgressRecipe();
   }, []);
-
   if (Object.keys(receipeDetail).length !== 0 && receipeDetail.meals) {
     const measureArray = (Object.entries(receipeDetail.meals[0]))
       .filter((chave) => chave[0].includes('strMeasure')).filter((valor) => valor[1]);
@@ -101,7 +98,6 @@ function RecipeDetails() {
       .map((ingredient) => ingredient[1]);
     ingredientGlobal = ingredients;
     measureGlobal = measureValue;
-    console.log(recommendationDetail);
   }
 
   return (
@@ -109,17 +105,13 @@ function RecipeDetails() {
       {(pathname.includes('/meals') && Object.keys(receipeDetail).length !== 0) && (
         receipeDetail.meals.map((receipe) => (
           <div key={ id }>
-
             <img
               src={ receipe.strMealThumb }
               alt={ receipe.strMeal }
               data-testid="recipe-photo"
             />
-
             <h1 data-testid="recipe-title">{ receipe.strMeal }</h1>
-
             <h2 data-testid="recipe-category">{ receipe.strCategory }</h2>
-
             {ingredientGlobal.map((ingrediente, index) => (
               <ul key={ index } data-testid={ `${index}-ingredient-name-and-measure` }>
                 <li>
@@ -133,13 +125,11 @@ function RecipeDetails() {
                 </li>
               </ul>
             ))}
-
             <p data-testid="instructions">
               Instruções:
               {' '}
               { receipe.strInstructions }
             </p>
-
             <iframe
               width="853"
               height="480"
@@ -154,7 +144,6 @@ function RecipeDetails() {
           </div>
         ))
       )}
-
       {(pathname.includes('/drinks') && Object.keys(receipeDetail).length !== 0) && (
         receipeDetail.drinks.map((receipe) => (
           <div key={ id }>
@@ -163,11 +152,8 @@ function RecipeDetails() {
               alt={ receipe.strDrink }
               data-testid="recipe-photo"
             />
-
             <h1 data-testid="recipe-title">{ receipe.strDrink }</h1>
-
             <h2 data-testid="recipe-category">{ receipe.strAlcoholic }</h2>
-
             {ingredientGlobal.map((ingrediente, index) => (
               <ul key={ index } data-testid={ `${index}-ingredient-name-and-measure` }>
                 <li>
@@ -181,7 +167,6 @@ function RecipeDetails() {
                 </li>
               </ul>
             ))}
-
             <p data-testid="instructions">
               Instruções:
               {' '}
@@ -190,7 +175,6 @@ function RecipeDetails() {
           </div>
         ))
       )}
-
       {(pathname.includes('/meals') && recommendationDetail.length !== 0) && (
         <Carousel>
           {recommendationDetail.map((receipes, indexRecommend) => (
@@ -231,8 +215,7 @@ function RecipeDetails() {
           ))}
         </Carousel>
       )}
-
-      <DetailsButtons />
+      <DetailsButtons state={ { receipeDetail } } />
       {conditionStartRecipe && (
         <button
           className="Start-Recipe-detail"
