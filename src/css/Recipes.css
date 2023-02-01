@@ -31,10 +31,10 @@
   font-style: oblique;
   font-weight: 900;
   margin: 20px 0;
+  text-transform: uppercase;
 }
 
 .recipes-img {
-  border-radius: 7%;
   height: auto;
   max-width: 100%;
 }
