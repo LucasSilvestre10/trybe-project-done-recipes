@@ -81,12 +81,12 @@ describe('Testes para a tela Recipe Details', () => {
       json: jest.fn().mockResolvedValueOnce({ meals: oneMealMock })
         .mockResolvedValue({ drinks: ginMock }),
     });
-    global.window.localStorage.setItem('doneRecipes', JSON.stringify([{ id: 52771 }]));
+    global.window.localStorage.setItem('doneRecipes', JSON.stringify([{ id: '52771' }]));
 
     renderWithRouter(<App />, '/meals/52771');
 
-    const startRecipeBtn = screen.getByTestId(startBtn);
+    const startRecipeBtn = screen.queryByTestId(startBtn);
 
-    expect(startRecipeBtn).toBeVisible();
+    expect(startRecipeBtn).not.toBeInTheDocument();
   });
 });

@@ -3,6 +3,7 @@ import { useLocation, useRouteMatch, useHistory } from 'react-router-dom';
 import { Carousel } from 'react-bootstrap';
 import useFetch from '../hooks/useFetch';
 import useLocalStorage from '../hooks/useLocalStorage';
+import DetailsButtons from './DetailsButtons';
 
 function RecipeDetails() {
   const location = useLocation();
@@ -23,7 +24,7 @@ function RecipeDetails() {
   const checkInProgressRecipe = () => {
     const inProgressRecipesObject = getLocalStorage('inProgressRecipes')
     || { drinks: {}, meals: {} };
-    console.log(inProgressRecipesObject);
+
     if (pathname.includes('/meals') && inProgressRecipesObject.meals) {
       setConditionInProgressRecipe((Object.keys(inProgressRecipesObject.meals))
         .some((progress) => progress === id));
@@ -36,6 +37,7 @@ function RecipeDetails() {
   useEffect(() => {
     const didMountFetch = async (url, idMount) => {
       setReceipeDetail(await performFetchReceipeDetail(url, idMount));
+
       if (pathname.includes('/meals')) {
         const recommendationResponse = await performFetchRecommendation('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const recommendationGeneral = recommendationResponse.drinks
@@ -101,11 +103,13 @@ function RecipeDetails() {
     measureGlobal = measureValue;
     console.log(recommendationDetail);
   }
+
   return (
     <div>
       {(pathname.includes('/meals') && Object.keys(receipeDetail).length !== 0) && (
         receipeDetail.meals.map((receipe) => (
           <div key={ id }>
+
             <img
               src={ receipe.strMealThumb }
               alt={ receipe.strMeal }
@@ -129,11 +133,13 @@ function RecipeDetails() {
                 </li>
               </ul>
             ))}
+
             <p data-testid="instructions">
               Instruções:
               {' '}
               { receipe.strInstructions }
             </p>
+
             <iframe
               width="853"
               height="480"
@@ -148,6 +154,7 @@ function RecipeDetails() {
           </div>
         ))
       )}
+
       {(pathname.includes('/drinks') && Object.keys(receipeDetail).length !== 0) && (
         receipeDetail.drinks.map((receipe) => (
           <div key={ id }>
@@ -156,8 +163,11 @@ function RecipeDetails() {
               alt={ receipe.strDrink }
               data-testid="recipe-photo"
             />
+
             <h1 data-testid="recipe-title">{ receipe.strDrink }</h1>
+
             <h2 data-testid="recipe-category">{ receipe.strAlcoholic }</h2>
+
             {ingredientGlobal.map((ingrediente, index) => (
               <ul key={ index } data-testid={ `${index}-ingredient-name-and-measure` }>
                 <li>
@@ -171,6 +181,7 @@ function RecipeDetails() {
                 </li>
               </ul>
             ))}
+
             <p data-testid="instructions">
               Instruções:
               {' '}
@@ -179,6 +190,7 @@ function RecipeDetails() {
           </div>
         ))
       )}
+
       {(pathname.includes('/meals') && recommendationDetail.length !== 0) && (
         <Carousel>
           {recommendationDetail.map((receipes, indexRecommend) => (
@@ -219,8 +231,8 @@ function RecipeDetails() {
           ))}
         </Carousel>
       )}
-      <button type="button" data-testid="share-btn">Compartilhar</button>
-      <button type="button" data-testid="favorite-btn">Favoritar</button>
+
+      <DetailsButtons />
       {conditionStartRecipe && (
         <button
           className="Start-Recipe-detail"
