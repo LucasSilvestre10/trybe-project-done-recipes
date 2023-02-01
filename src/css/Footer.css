@@ -1,0 +1,24 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-img-drinks {
+  background-image: linear-gradient(#8958a3, #fcdc36);
+  border-color: #fcdc36;
+}
+
+.footer-img-meal {
+  background-image: linear-gradient(#8958a3, #fcdc36);
+  border-color: #fcdc36;
+}
+
+.footer-drinks {
+  border-spacing: 50px;
+  margin-right: 70%;
+}
+
+.footer-meals {
+  border-spacing: 50px;
+}
