@@ -9,7 +9,7 @@ function Recipes() {
   const history = useHistory();
   const [receipes, setReceipes] = useState([]);
   const [keyPage, setKeyPage] = useState('meals');
-  const [selectedFilter, setSelectedFilter] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('All');
   const [filtersCategorys, setFiltersCategorys] = useState([]);
   const { fetchAllRecipes, fetchCategoris, getRecipesByCategory } = useFetch();
 
@@ -43,7 +43,7 @@ function Recipes() {
 
   useEffect(() => {
     const page = location.pathname;
-    switch (page) {
+    /* switch (page) {
     case '/meals':
       setKeyPage('Meal');
       break;
@@ -51,7 +51,14 @@ function Recipes() {
       setKeyPage('Drink');
       break;
     default:
-      break;
+    break;
+    }
+    */
+    if (page === '/meals') {
+      setKeyPage('Meal');
+    }
+    if (page === '/drinks') {
+      setKeyPage('Drink');
     }
   }, [receipes]);
 

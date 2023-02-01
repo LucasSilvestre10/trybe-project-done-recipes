@@ -1,12 +1,10 @@
 import React from 'react';
-import { renderHook, screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
-import { useLocation, useHistory } from 'react-router-dom';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
 import mealCategories from '../../cypress/mocks/mealCategories';
-import mealsByIngredient from '../../cypress/mocks/mealsByIngredient';
 
 describe('testa component Recipes na rota /meals', () => {
   let historyTeste = '';
@@ -29,9 +27,15 @@ describe('testa component Recipes na rota /meals', () => {
       expect(filter).toHaveTextContent(category);
     });
   });
-  test('clicar em uma receita difeciona para pagina de detalhes', () => {
+  test('clicar em uma receita direciona para pagina de detalhes', () => {
     const buttonDetails = screen.getByTestId('0-card-img');
     userEvent.click(buttonDetails);
     expect(historyTeste.location.pathname).toBe('/meals/');
+  });
+
+  test('creates Contract on correct date', async () => {
+    const buttonCategory = screen.getByTestId('Chicken-category-filter');
+    userEvent.click(buttonCategory);
+    expect(buttonCategory).toBeInTheDocument();
   });
 });
