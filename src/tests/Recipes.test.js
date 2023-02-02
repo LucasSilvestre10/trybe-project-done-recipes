@@ -15,7 +15,11 @@ describe('testa component Recipes na rota /meals', () => {
     }));
 
     await act(async () => {
-      const { history } = renderWithRouter(<App />, '/meals');
+      const { history } = renderWithRouter(
+
+        <App />,
+        '/meals',
+      );
       historyTeste = history;
     });
   });

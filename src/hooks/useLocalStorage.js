@@ -8,6 +8,11 @@ function useLocalStorage() {
       localStorage.setItem(key, JSON.stringify(value));
       break;
 
+    case 'favoriteRecipes':
+
+      localStorage.setItem(key, JSON.stringify(value));
+      break;
+
     default:
       throw new Error();
     }

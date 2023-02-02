@@ -1,3 +1,9 @@
+* {
+  box-sizing: border-box;
+  margin: 0%;
+  padding: 0%;
+}
+
 .meals {
   align-items: center;
   background: #0fa36b;
@@ -75,4 +81,9 @@ footer {
   position: fixed;
   text-align: center;
   width: 100%;
+}
+
+.Start-Recipe-detail {
+  bottom: 0;
+  position: fixed;
 }

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import searchIcon from '../images/searchIcon.svg';
+import { RecipesContext } from '../context/RecipesProvider';
 
 function SearchBar() {
   const [searchBar, setSearchBar] = useState({
@@ -9,7 +10,8 @@ function SearchBar() {
   const location = useLocation();
   const { performFetchSearchFilter } = useFetch();
   const history = useHistory();
-  const [receipesRender, setReceipesRender] = useState([]);
+  // const [receipesRender, setReceipesRender] = useState([]);
+  const { setReceipes } = useContext(RecipesContext);
   const receipeRenderNumber = 12;
 
   const handleChange = ({ target }) => {
@@ -28,7 +30,7 @@ function SearchBar() {
         if (responseFetch.apiResponse.meals.length === 1) {
           history.push(`/meals/${responseFetch.apiResponse.meals[0].idMeal}`);
         } else {
-          setReceipesRender(responseFetch.apiResponse.meals
+          setReceipes(responseFetch.apiResponse.meals
             .filter((_receipe, index) => index < receipeRenderNumber));
         }
       } else {
@@ -37,7 +39,7 @@ function SearchBar() {
           history.push(`/drinks/${responseFetch.apiResponse.drinks[0].idDrink}`);
           break;
         default:
-          setReceipesRender(responseFetch.apiResponse.drinks
+          setReceipes(responseFetch.apiResponse.drinks
             .filter((_receipe, index) => index < receipeRenderNumber));
           break;
         }
@@ -50,10 +52,12 @@ function SearchBar() {
     const { inputText, searchFilter } = searchBar;
     let responseFetch = {};
     if (pathname === '/meals') {
-      responseFetch = await performFetchSearchFilter('https://www.themealdb.com/api/json/v1/1/', inputText, searchFilter);
+      // responseFetch = await performFetchSearchFilter('https://www.themealdb.com/api/json/v1/1/', inputText, searchFilter);
+      responseFetch = await performFetchSearchFilter('meal', inputText, searchFilter);
       checkAndCompleteFetch(responseFetch);
     } else {
-      responseFetch = await performFetchSearchFilter('https://www.thecocktaildb.com/api/json/v1/1/', inputText, searchFilter);
+      // responseFetch = await performFetchSearchFilter('https://www.thecocktaildb.com/api/json/v1/1/', inputText, searchFilter);
+      responseFetch = await performFetchSearchFilter('cocktail', inputText, searchFilter);
       checkAndCompleteFetch(responseFetch);
     }
   };
@@ -126,7 +130,7 @@ function SearchBar() {
           >
             Search
           </button>
-          {location.pathname === '/meals' && (
+          {/* {location.pathname === '/meals' && (
             receipesRender.map((receipe, index) => (
               <div
                 key={ receipe.idMeal }
@@ -155,7 +159,7 @@ function SearchBar() {
                 <span data-testid={ `${index}-card-name` }>{receipe.strDrink}</span>
               </div>
             ))
-          )}
+          )} */}
         </div>
       )}
 
