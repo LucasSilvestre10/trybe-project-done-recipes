@@ -1,0 +1,88 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.cook {
+  color: black;
+  font-size: 40px;
+}
+
+.profile-email {
+  color: rgb(26, 27, 28);
+  font-size: 20px;
+  font-style: oblique;
+  font-weight: 500;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.buttons-profile {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.doneRcipes {
+  color: black;
+  font-size: 25px;
+  margin-left: 8px;
+}
+
+.profile-btn-recipes {
+  background: #fcc436;
+  border-radius: 100px;
+  color: white;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+  font-weight: 700;
+  height: 40px;
+  margin-right: 10px;
+  margin-top: 5px;
+  text-align: center;
+  width: 200px;
+}
+
+.profile-btn-favorite-recipes {
+  background: #fcc436;
+  border-radius: 100px;
+  color: white;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+  font-weight: 700;
+  height: 40px;
+  margin-right: 10px;
+  margin-top: 7px;
+  text-align: center;
+  width: 200px;
+}
+
+.favorite {
+  color: black;
+  font-size: 20px;
+  margin-left: 8px;
+}
+
+.profile-btn-logout {
+  background: #fcc436;
+  border-radius: 100px;
+  color: white;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+  font-weight: 700;
+  height: 40px;
+  margin-right: 10px;
+  margin-top: 7px;
+  text-align: center;
+  width: 200px;
+}
+
+.logout {
+  color: black;
+  font-size: 25px;
+  margin-left: 8px;
+}
+
+button:hover {
+  transform: scale(1.1);
+  transition: all 0.5s;
+}
