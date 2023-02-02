@@ -45,12 +45,84 @@ function useFetch() {
     setIsLoading(false);
     return apiResponse;
   };
+  
+  const fetchAllRecipes = async (page) => {
+    let domain = '';
+
+    switch (page) {
+    case '/meals':
+      domain = 'themeal';
+      break;
+    case '/drinks':
+      domain = 'thecocktail';
+      break;
+    default:
+      break;
+    }
+
+    const response = await (await fetch(`https://www.${domain}db.com/api/json/v1/1/search.php?s=`)).json();
+    const key = page.replace('/', '');
+    const result = response[key];
+    return result;
+  };
+
+  const fetchCategoris = async (page) => {
+    let domain = '';
+
+    switch (page) {
+    case '/meals':
+      domain = 'themeal';
+      break;
+    case '/drinks':
+      domain = 'thecocktail';
+      break;
+    default:
+      break;
+    }
+    const response = await (await fetch(`https://www.${domain}db.com/api/json/v1/1/list.php?c=list`)).json();
+    const key = page.replace('/', '');
+    const result = response[key];
+
+    return result;
+  };
+
+  const getRecipesByCategory = async (page, category, selectedFilter) => {
+    let domain = '';
+    let url = '';
+
+    switch (page) {
+    case '/meals':
+      domain = 'themeal';
+      break;
+    case '/drinks':
+      domain = 'thecocktail';
+      break;
+    default:
+      break;
+    }
+    url = category === 'All' || category === selectedFilter
+      ? `https://www.${domain}db.com/api/json/v1/1/search.php?s=`
+      : `https://www.${domain}db.com/api/json/v1/1/filter.php?c=${category}`;
+    const response = await (await fetch(url)).json();
+    const key = page.replace('/', '');
+    const result = response[key];
+    const newResult = [];
+    const MAX_LENG = 12;
+    for (let index = 0; index < MAX_LENG && result[index]; index += 1) {
+      newResult.push(result[index]);
+    }
+
+    return newResult;
+  };
 
   return {
     isLoading,
     performFetchSearchFilter,
     performFetchReceipeDetail,
     performFetchRecommendation,
+    fetchAllRecipes,
+    fetchCategoris,
+    getRecipesByCategory,
   };
 }
 

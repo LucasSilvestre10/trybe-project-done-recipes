@@ -1,8 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import { BiDish } from 'react-icons/bi';
+import { HiHeart } from 'react-icons/hi';
 import profileIcon from '../images/profileIcon.svg';
 import SearchBar from './SearchBar';
+import '../css/Header.css';
 
 function Header() {
   const location = useLocation();
@@ -33,19 +36,38 @@ function Header() {
 
   return (
     <div>
+      <header className="header-container">
+        <BiDish className="dish" />
+        <HiHeart className="heart" />
 
-      <button type="button" onClick={ () => history.push('/profile') }>
-        <img data-testid="profile-top-btn" src={ profileIcon } alt="profile pic" />
-      </button>
+        <h5 className="title-header">
+          RECIPES
+          {' '}
+          <strong>app</strong>
+        </h5>
 
-      <h1 data-testid="page-title">
+        <button
+          className="btn-profile"
+          type="button"
+          onClick={ () => history.push('/profile') }
+        >
+          <img
+            className="img-profile"
+            data-testid="profile-top-btn"
+            src={ profileIcon }
+            alt="profile pic"
+          />
+        </button>
+      </header>
+      <h1
+        className="title-page"
+        data-testid="page-title"
+      >
         {title}
+        {(location.pathname === '/meals' || location.pathname === '/drinks') && (
+          <SearchBar />
+        )}
       </h1>
-
-      {(location.pathname === '/meals' || location.pathname === '/drinks') && (
-        <SearchBar />
-      )}
-
     </div>
   );
 }
