@@ -32,32 +32,46 @@ function DetailsButtons({ state }) {
   }, [receipeDetail]);
 
   const handleSaveStorage = () => {
-    const oldStorage = getLocalStorage('favoriteRecipes') || [];
-    let objetoAtualRecipe = {};
-    if (receipeDetail.meals) {
-      objetoAtualRecipe = {
-        id: receipeDetail.meals[0].idMeal,
-        type: 'meal',
-        nationality: receipeDetail.meals[0].strArea,
-        category: receipeDetail.meals[0].strCategory,
-        alcoholicOrNot: '',
-        name: receipeDetail.meals[0].strMeal,
-        image: receipeDetail.meals[0].strMealThumb,
-      };
+    if (favorite) {
+      const oldStorage = getLocalStorage('favoriteRecipes');
+      if (receipeDetail.meals) {
+        const newStorage = oldStorage
+          .filter(({ id }) => id !== receipeDetail.meals[0].idMeal);
+        setLocalStorage('favoriteRecipes', newStorage);
+      } else if (receipeDetail.drinks) {
+        const newStorage = oldStorage
+          .filter(({ id }) => id !== receipeDetail.drinks[0].idDrink);
+        setLocalStorage('favoriteRecipes', newStorage);
+      }
+      setFavorite(false);
     } else {
-      objetoAtualRecipe = {
-        id: receipeDetail.drinks[0].idDrink,
-        type: 'drink',
-        nationality: '',
-        category: receipeDetail.drinks[0].strCategory,
-        alcoholicOrNot: receipeDetail.drinks[0].strAlcoholic,
-        name: receipeDetail.drinks[0].strDrink,
-        image: receipeDetail.drinks[0].strDrinkThumb,
-      };
+      const oldStorage = getLocalStorage('favoriteRecipes') || [];
+      let objetoAtualRecipe = {};
+      if (receipeDetail.meals) {
+        objetoAtualRecipe = {
+          id: receipeDetail.meals[0].idMeal,
+          type: 'meal',
+          nationality: receipeDetail.meals[0].strArea,
+          category: receipeDetail.meals[0].strCategory,
+          alcoholicOrNot: '',
+          name: receipeDetail.meals[0].strMeal,
+          image: receipeDetail.meals[0].strMealThumb,
+        };
+      } else if (receipeDetail.drinks) {
+        objetoAtualRecipe = {
+          id: receipeDetail.drinks[0].idDrink,
+          type: 'drink',
+          nationality: '',
+          category: receipeDetail.drinks[0].strCategory,
+          alcoholicOrNot: receipeDetail.drinks[0].strAlcoholic,
+          name: receipeDetail.drinks[0].strDrink,
+          image: receipeDetail.drinks[0].strDrinkThumb,
+        };
+      }
+      const actualStorage = [...oldStorage, objetoAtualRecipe];
+      setLocalStorage('favoriteRecipes', actualStorage);
+      setFavorite(true);
     }
-    const actualStorage = [...oldStorage, objetoAtualRecipe];
-    setLocalStorage('favoriteRecipes', actualStorage);
-    setFavorite(true);
   };
 
   return (
@@ -74,6 +88,7 @@ function DetailsButtons({ state }) {
         type="button"
         // data-testid="favorite-btn"
         onClick={ handleSaveStorage }
+        src={ favorite ? blackHeartIcon : whiteHeartIcon }
       >
         {favorite ? (
           <img
