@@ -36,7 +36,9 @@ function RecipeDetails() {
 
   useEffect(() => {
     const didMountFetch = async (url, idMount) => {
-      setReceipeDetail(await performFetchReceipeDetail(url, idMount));
+      const xablau = await performFetchReceipeDetail(url, idMount);
+      console.log('xablau', xablau);
+      setReceipeDetail(xablau);
       if (pathname.includes('/meals')) {
         const recommendationResponse = await performFetchRecommendation('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const recommendationGeneral = recommendationResponse.drinks
@@ -99,7 +101,7 @@ function RecipeDetails() {
     ingredientGlobal = ingredients;
     measureGlobal = measureValue;
   }
-
+  console.log('receipeDetail final', receipeDetail);
   return (
     <div>
       {(pathname.includes('/meals') && Object.keys(receipeDetail).length !== 0) && (

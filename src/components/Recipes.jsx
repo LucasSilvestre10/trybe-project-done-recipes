@@ -53,13 +53,8 @@ function Recipes() {
   };
   const getFilters = async () => {
     const result = await fetchCategoris(location.pathname);
-    const newResult = [];
-    const MAX_LENG = 5;
-    for (let index = 0; index < MAX_LENG; index += 1) {
-      newResult.push(result[index]);
-    }
     setFiltersCategorys(
-      newResult,
+      result,
     );
   };
 

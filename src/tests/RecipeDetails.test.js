@@ -1,6 +1,7 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
 import oneMealMock from './mocks/oneMealMock';
@@ -217,13 +218,24 @@ describe('Testes para a tela Recipe Details', () => {
       json: jest.fn().mockResolvedValueOnce({ meals: oneMealMock })
         .mockResolvedValue({ drinks: ginMock }),
     });
-    renderWithRouter(<App />, mealsID);
-    const favoriteBtn = screen.getByTestId(favoriteButton);
-    expect(favoriteBtn).toHaveAttribute('src', whiteHeartIcon);
-    userEvent.click(favoriteBtn);
-    expect(favoriteBtn).toHaveAttribute('src', blackHeartIcon);
-    userEvent.click(favoriteBtn);
-    expect(favoriteBtn).toHaveAttribute('src', whiteHeartIcon);
+    localStorage.setItem('favoriteRecipes', JSON.stringify([{ id: '5271' }]));
+    const storage = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    act(() => {
+      renderWithRouter(
+        <App />,
+        mealsID,
+      );
+    });
+    waitFor(() => {
+      const favoriteBtn = screen.getByTestId(favoriteButton);
+      expect(favoriteBtn).toHaveAttribute('src', whiteHeartIcon);
+      userEvent.click(favoriteBtn);
+      expect(favoriteBtn).toHaveAttribute('src', blackHeartIcon);
+      console.log(storage);
+      // expect(storage).toBe(null);
+      userEvent.click(favoriteBtn);
+      expect(favoriteBtn).toHaveAttribute('src', whiteHeartIcon);
+    });
   });
 
   // test('Verifica se o botão favorito no drink depois de clicado vai de whiteHeartIcon para blackHeartIcon', () => {

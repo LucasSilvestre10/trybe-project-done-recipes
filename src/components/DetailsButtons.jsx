@@ -14,7 +14,8 @@ function DetailsButtons({ state }) {
   const { receipeDetail } = state;
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
   const [favorite, setFavorite] = useState(false);
-  console.log(receipeDetail);
+  console.log(state);
+  // console.log(receipeDetail);
 
   const handleShare = () => {
     copy(`http://localhost:3000${pathname}`);
@@ -23,6 +24,7 @@ function DetailsButtons({ state }) {
 
   useEffect(() => {
     const actualStorage = getLocalStorage('favoriteRecipes') || [];
+    // console.log(receipeDetail.meals);
     if (receipeDetail.meals) {
       setFavorite(actualStorage
         .some((receipeStorage) => receipeStorage.id === receipeDetail.meals[0].idMeal));
