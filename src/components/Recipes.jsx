@@ -1,17 +1,44 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import '../css/Recipes.css';
+import { RecipesContext } from '../context/RecipesProvider';
 
 function Recipes() {
   const location = useLocation();
   const history = useHistory();
-  const [receipes, setReceipes] = useState([]);
+  // const [receipes, setReceipes] = useState([]);
+  const { receipes, setReceipes } = useContext(RecipesContext);
   const [keyPage, setKeyPage] = useState('meals');
   const [selectedFilter, setSelectedFilter] = useState('All');
   const [filtersCategorys, setFiltersCategorys] = useState([]);
   const { fetchAllRecipes, fetchCategoris, getRecipesByCategory } = useFetch();
+
+  // const checkAndCompleteFetch = (responseFetch) => {
+  //   if (responseFetch.fetchPerformed) {
+  //     if (!responseFetch.apiResponse.meals && !responseFetch.apiResponse.drinks) {
+  //       global.alert('Sorry, we haven\'t found any recipes for these filters.');
+  //     } else if (responseFetch.apiResponse.meals) {
+  //       if (responseFetch.apiResponse.meals.length === 1) {
+  //         history.push(`/meals/${responseFetch.apiResponse.meals[0].idMeal}`);
+  //       } else {
+  //         setReceipesRender(responseFetch.apiResponse.meals
+  //           .filter((_receipe, index) => index < receipeRenderNumber));
+  //       }
+  //     } else {
+  //       switch (responseFetch.apiResponse.drinks.length) {
+  //       case 1:
+  //         history.push(`/drinks/${responseFetch.apiResponse.drinks[0].idDrink}`);
+  //         break;
+  //       default:
+  //         setReceipesRender(responseFetch.apiResponse.drinks
+  //           .filter((_receipe, index) => index < receipeRenderNumber));
+  //         break;
+  //       }
+  //     }
+  //   }
+  // };
 
   const getRecipes = async () => {
     const result = await fetchAllRecipes(location.pathname);

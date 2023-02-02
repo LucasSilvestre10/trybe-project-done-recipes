@@ -3,17 +3,17 @@ import { useState } from 'react';
 function useFetch() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const performFetchSearchFilter = async (url, textFilter, categoryFilter) => {
+  const performFetchSearchFilter = async (routeLink, textFilter, categoryFilter) => {
     setIsLoading(true);
     let response = '';
-    let apiResponse = '';
+    let apiResponse = null;
     const objectResponse = { fetchPerformed: true, apiResponse };
     if (categoryFilter === 'ingredient') {
-      response = await fetch(`${url}filter.php?i=${textFilter}`);
+      response = await fetch(`https://www.the${routeLink}db.com/api/json/v1/1/filter.php?i=${textFilter}`);
       apiResponse = await response.json();
       objectResponse.apiResponse = apiResponse;
     } else if (categoryFilter === 'name') {
-      response = await fetch(`${url}search.php?s=${textFilter}`);
+      response = await fetch(`https://www.the${routeLink}db.com/api/json/v1/1/search.php?s=${textFilter}`);
       apiResponse = await response.json();
       objectResponse.apiResponse = apiResponse;
     } else if (categoryFilter === 'firstLetter') {
@@ -21,12 +21,13 @@ function useFetch() {
         global.alert('Your search must have only 1 (one) character');
         objectResponse.fetchPerformed = false;
       } else {
-        response = await fetch(`${url}search.php?f=${textFilter}`);
+        response = await fetch(`https://www.the${routeLink}db.com/api/json/v1/1/search.php?f=${textFilter}`);
         apiResponse = await response.json();
         objectResponse.apiResponse = apiResponse;
       }
     }
     setIsLoading(false);
+    // console.log(objectResponse);
     return objectResponse;
   };
 
@@ -45,7 +46,7 @@ function useFetch() {
     setIsLoading(false);
     return apiResponse;
   };
-  
+
   const fetchAllRecipes = async (page) => {
     let domain = '';
 
