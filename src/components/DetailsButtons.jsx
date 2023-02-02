@@ -14,6 +14,7 @@ function DetailsButtons({ state }) {
   const { receipeDetail } = state;
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
   const [favorite, setFavorite] = useState(false);
+  console.log(receipeDetail);
 
   const handleShare = () => {
     copy(`http://localhost:3000${pathname}`);

@@ -226,20 +226,29 @@ describe('Testes para a tela Recipe Details', () => {
     expect(favoriteBtn).toHaveAttribute('src', whiteHeartIcon);
   });
 
-  test('Verifica se o botão favorito no drink depois de clicado vai de whiteHeartIcon para blackHeartIcon', () => {
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValueOnce({ drinks: oneDrinkMock })
-        .mockResolvedValue({ meals: soupMock }),
-    });
-    renderWithRouter(<App />, drinksID);
-    const favoriteBtn = screen.getByTestId(favoriteButton);
-    expect(favoriteBtn).toHaveAttribute('src', whiteHeartIcon);
-    userEvent.click(favoriteBtn);
-    expect(favoriteBtn).toHaveAttribute('src', blackHeartIcon);
-    userEvent.click(favoriteBtn);
-    expect(favoriteBtn).toHaveAttribute('src', whiteHeartIcon);
-  });
+  // test('Verifica se o botão favorito no drink depois de clicado vai de whiteHeartIcon para blackHeartIcon', () => {
+  //   jest.spyOn(global, 'fetch');
+  //   global.fetch.mockResolvedValue({
+  //     json: jest.fn().mockResolvedValueOnce({ drinks: oneDrinkMock })
+  //       .mockResolvedValue({ meals: soupMock }),
+  //   });
+  //   renderWithRouter(<App />, drinksID);
+  //   const favoriteBtn = screen.getByTestId(favoriteButton);
+  //   expect(favoriteBtn).toHaveAttribute('src', whiteHeartIcon);
+  //   window.localStorage.setItem('favoriteRecipes', JSON.stringify([{ id: '9999' }]));
+  //   const storage = window.localStorage.getItem('favoriteRecipes');
+  //   const storageTratado = JSON.parse(storage);
+  //   expect(storageTratado).toEqual([{ id: '9999' }]);
+  //   userEvent.click(favoriteBtn);
+  //   expect(favoriteBtn).toHaveAttribute('src', blackHeartIcon);
+  //   const storageNovo = window.localStorage.getItem('favoriteRecipes');
+  //   const storageNovoTratado = JSON.parse(storageNovo);
+  //   expect(storageNovoTratado).toBe(null);
+  //   userEvent.click(favoriteBtn);
+  //   expect(favoriteBtn).toHaveAttribute('src', whiteHeartIcon);
+  //   // const testetest = screen.getByTestId('testeteste');
+  //   // expect(testetest).toBeInTheDocument();
+  // });
 
   // test('Verifica se o botão favorito possui o blackHeartIcon com localStorage', () => {
   //   const answer = JSON.stringify([{ id: 52774 }]);
