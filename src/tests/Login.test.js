@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import App from '../App';
 import renderWithRouter from './helpers/renderWithRouter';
+import RecipesProvider from '../context/RecipesProvider';
 
 const emailTest = 'grupo6@trybe.com';
 let inputEmail = '';
@@ -12,7 +13,7 @@ let historyTest = '';
 
 describe('Testes para Login', () => {
   beforeEach(() => {
-    const { history } = renderWithRouter(<App />);
+    const { history } = renderWithRouter(<RecipesProvider><App /></RecipesProvider>);
     inputEmail = screen.getByTestId('email-input');
     inputPassword = screen.getByTestId('password-input');
     buttonLogin = screen.getByTestId('login-submit-btn');
