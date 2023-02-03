@@ -55,23 +55,24 @@ describe('Testes para a tela Recipe Details', () => {
     const photoRecipeMeal = await screen.findByTestId('recipe-photo');
     const recipeTitle = screen.getByTestId('recipe-title');
     const recipeCategory = screen.getByTestId('recipe-category');
-    const ingredients = screen.getAllByTestId(/ingredient-name-and-measure/i);
     const instructions = screen.getByTestId('instructions');
     const video = screen.getByTestId('video');
     const drink = screen.getAllByTestId(/recommendation-card/i);
     const drinkTitle = screen.getAllByTestId(/recommendation-title/i);
     const startRecipeBtn = screen.getByTestId(startBtn);
-
     expect(photoRecipeMeal).toBeInTheDocument();
     expect(recipeTitle).toBeInTheDocument();
     expect(recipeCategory).toBeInTheDocument();
-    expect(ingredients).toHaveLength(8);
     expect(instructions).toBeInTheDocument();
     expect(video).toBeInTheDocument();
     expect(drink).toHaveLength(6);
     expect(drinkTitle[0]).toBeInTheDocument('Gin Fizz');
     expect(drinkTitle[1]).toBeInTheDocument('Gin Sour');
     expect(startRecipeBtn).toBeInTheDocument();
+    await waitFor(async () => {
+      const ingredients = screen.getAllByTestId(/ingredient-name-and-measure/i);
+      expect(ingredients).toHaveLength(8);
+    });
   });
 
   test('Renderiza todos os componentes da tela de detalhes do Meal /drinks/178319', async () => {
@@ -85,7 +86,6 @@ describe('Testes para a tela Recipe Details', () => {
     const photoRecipeDrink = await screen.findByTestId('recipe-photo');
     const recipeTitle = screen.getByTestId('recipe-title');
     const recipeCategory = screen.getByTestId('recipe-category');
-    const ingredients = screen.getAllByTestId(/ingredient-name-and-measure/i);
     const instructions = screen.getByTestId('instructions');
     const meal = screen.getAllByTestId(/recommendation-card/i);
     const mealTitle = screen.getAllByTestId(/recommendation-title/i);
@@ -94,12 +94,15 @@ describe('Testes para a tela Recipe Details', () => {
     expect(photoRecipeDrink).toBeInTheDocument();
     expect(recipeTitle).toBeInTheDocument();
     expect(recipeCategory).toBeInTheDocument();
-    expect(ingredients).toHaveLength(3);
     expect(instructions).toBeInTheDocument();
     expect(meal).toHaveLength(6);
     expect(mealTitle[0]).toBeInTheDocument('Leblebi Soup');
     expect(mealTitle[1]).toBeInTheDocument('Red Peas Soup');
     expect(startRecipeBtn).toBeInTheDocument();
+    await waitFor(async () => {
+      const ingredients = screen.getAllByTestId(/ingredient-name-and-measure/i);
+      expect(ingredients).toHaveLength(3);
+    });
   });
 
   test('Verificar se o button Start Recipe desaparece caso a receita já tem no localStorage', () => {
@@ -212,7 +215,7 @@ describe('Testes para a tela Recipe Details', () => {
   //   // expect(getStorageArray).toHaveLength(1);
   // });
 
-  test('Verifica se o botão favorito no meal depois de clicado vai de whiteHeartIcon para blackHeartIcon', () => {
+  test('Verifica se o botão favorito no meal depois de clicado vai de whiteHeartIcon para blackHeartIcon', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValueOnce({ meals: oneMealMock })
@@ -226,7 +229,7 @@ describe('Testes para a tela Recipe Details', () => {
         mealsID,
       );
     });
-    waitFor(() => {
+    await waitFor(() => {
       const favoriteBtn = screen.getByTestId(favoriteButton);
       expect(favoriteBtn).toHaveAttribute('src', whiteHeartIcon);
       userEvent.click(favoriteBtn);

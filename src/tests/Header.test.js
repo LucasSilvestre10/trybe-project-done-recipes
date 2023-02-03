@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
+import RecipesProvider from '../context/RecipesProvider';
 
 const testIDProfile = 'profile-top-btn';
 const testIDTitle = 'page-title';
@@ -10,7 +11,7 @@ const testIDSearch = 'search-top-btn';
 
 describe('Testes para o Header', () => {
   test('Verifica a rota "/meals"', () => {
-    const component = renderWithRouter(<App />, '/meals');
+    const component = renderWithRouter(<RecipesProvider><App /></RecipesProvider>, '/meals');
     const historyTeste = component.history;
     const iconProfile = screen.getByTestId(testIDProfile);
     const title = screen.getByTestId(testIDTitle);
@@ -23,7 +24,7 @@ describe('Testes para o Header', () => {
   });
 
   test('Verifica a rota "/drinks"', () => {
-    const component = renderWithRouter(<App />, '/drinks');
+    const component = renderWithRouter(<RecipesProvider><App /></RecipesProvider>, '/drinks');
     const historyTeste = component.history;
     const iconProfile = screen.getByTestId(testIDProfile);
     const title = screen.getByTestId(testIDTitle);
@@ -42,7 +43,7 @@ describe('Testes para o Header', () => {
     const mockKey = 'user';
     const mockJson = { email: 'trybe@trybe.com' };
     setLocalStorage(mockKey, mockJson);
-    const component = renderWithRouter(<App />, '/profile');
+    const component = renderWithRouter(<RecipesProvider><App /></RecipesProvider>, '/profile');
     const historyTeste = component.history;
     const iconElementProfile = screen.getByTestId(testIDProfile);
     const titleProfile = screen.getByTestId(testIDTitle);
@@ -56,7 +57,7 @@ describe('Testes para o Header', () => {
   });
 
   test('Verifica a rota "/done-recipes"', () => {
-    const component = renderWithRouter(<App />, '/done-recipes');
+    const component = renderWithRouter(<RecipesProvider><App /></RecipesProvider>, '/done-recipes');
     const historyTeste = component.history;
     const iconElementDoneRecipes = screen.getByTestId(testIDProfile);
     const titleDoneRecipes = screen.getByTestId(testIDTitle);
@@ -70,7 +71,7 @@ describe('Testes para o Header', () => {
   });
 
   test('Verifica a rota "/favorite-recipes"', () => {
-    const component = renderWithRouter(<App />, '/favorite-recipes');
+    const component = renderWithRouter(<RecipesProvider><App /></RecipesProvider>, '/favorite-recipes');
     const historyTeste = component.history;
     const iconElementFavoriteRecipes = screen.getByTestId(testIDProfile);
     const titleFavoriteRecipes = screen.getByTestId(testIDTitle);
@@ -84,7 +85,7 @@ describe('Testes para o Header', () => {
   });
 
   test('Testa se botão de perfil direciona para rota corretamente', () => {
-    const component = renderWithRouter(<App />, '/meals');
+    const component = renderWithRouter(<RecipesProvider><App /></RecipesProvider>, '/meals');
     const historyTeste = component.history;
     const buttonProfile = screen.getByTestId(testIDProfile);
 

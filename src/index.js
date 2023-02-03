@@ -4,6 +4,7 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import RecipesProvider from './context/RecipesProvider';
+import RecipeDetailsProvider from './context/RecipeDetailsProvider';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM
@@ -11,8 +12,11 @@ ReactDOM
   .render(
     <BrowserRouter>
       <RecipesProvider>
+        <RecipeDetailsProvider>
 
-        <App />
+          <App />
+
+        </RecipeDetailsProvider>
 
       </RecipesProvider>
     </BrowserRouter>,

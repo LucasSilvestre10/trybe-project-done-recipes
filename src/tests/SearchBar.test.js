@@ -1,6 +1,6 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
@@ -37,7 +37,7 @@ describe('Verificar SearchBar', () => {
   });
 
   test('Verificar se o alert é feito mostrando que não há receitas para xablau', async () => {
-    jest.spyOn(window, 'alert').mockImplementation(() => {});
+    window.alert = jest.fn();
 
     act(() => {
       renderWithRouter(
@@ -57,6 +57,9 @@ describe('Verificar SearchBar', () => {
 
     const searchButton = screen.getByTestId(testIDSearchBtn);
     userEvent.click(searchButton);
+    await waitFor(async () => {
+      expect(window.alert).toHaveBeenCalledWith('Sorry, we haven\'t found any recipes for these filters.');
+    });
   });
 
   test('Verificar se há roteamento para a página de detalhes caso apenas um meal é descoberto', async () => {

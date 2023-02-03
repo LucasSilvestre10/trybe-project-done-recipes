@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useRouteMatch, useHistory } from 'react-router-dom';
 import { Carousel } from 'react-bootstrap';
-import useFetch from '../hooks/useFetch';
+import copy from 'clipboard-copy';
 import useLocalStorage from '../hooks/useLocalStorage';
-import DetailsButtons from './DetailsButtons';
+// import DetailsButtons from './DetailsButtons';
+import { RecipeDetailsContext } from '../context/RecipeDetailsProvider';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function RecipeDetails() {
   const location = useLocation();
@@ -11,16 +15,25 @@ function RecipeDetails() {
   const { pathname } = location;
   const match = useRouteMatch();
   const { params: { id } } = match;
-  const { performFetchReceipeDetail, performFetchRecommendation } = useFetch();
-  const [receipeDetail, setReceipeDetail] = useState({});
-  const [recommendationDetail, setRecommendationDetail] = useState([]);
-  let ingredientGlobal = [];
-  let measureGlobal = [];
-  const NUMBER_RECOMMENDED = 6;
-  const NUMBER_VISIBLE = 2;
+  const { receipeDetail, ingredientGlobal, recommendationDetail,
+    measureGlobal, didMountFetch, construcaoIngredientesArray,
+    handleSaveStorage, favorite, setFavorite } = useContext(RecipeDetailsContext);
   const { getLocalStorage } = useLocalStorage();
   const [conditionStartRecipe, setConditionStartRecipe] = useState(true);
   const [conditionInProgressRecipe, setConditionInProgressRecipe] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const checkLocalStorage = () => {
+    const actualStorage = getLocalStorage('favoriteRecipes') || [];
+    // console.log(receipeDetail.meals);
+    if (receipeDetail.meals) {
+      setFavorite(actualStorage
+        .some((receipeStorage) => receipeStorage.id === receipeDetail.meals[0].idMeal));
+    } else if (receipeDetail.drinks) {
+      setFavorite(actualStorage
+        .some((receipeStorage) => receipeStorage.id === receipeDetail.drinks[0].idDrink));
+    }
+  };
+
   const checkInProgressRecipe = () => {
     const inProgressRecipesObject = getLocalStorage('inProgressRecipes')
     || { drinks: {}, meals: {} };
@@ -33,44 +46,11 @@ function RecipeDetails() {
         .some((progress) => progress === id));
     }
   };
-
+  const handleShare = () => {
+    copy(`http://localhost:3000${pathname}`);
+    setCopied(true);
+  };
   useEffect(() => {
-    const didMountFetch = async (url, idMount) => {
-      const xablau = await performFetchReceipeDetail(url, idMount);
-      console.log('xablau', xablau);
-      setReceipeDetail(xablau);
-      if (pathname.includes('/meals')) {
-        const recommendationResponse = await performFetchRecommendation('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-        const recommendationGeneral = recommendationResponse.drinks
-          .filter((recommend, index) => index < NUMBER_RECOMMENDED)
-          .map((recommend, index) => ({ ...recommend, recipeId: index }));
-        const recommendationOnePart = recommendationGeneral
-          .filter((recommend, index) => index < NUMBER_VISIBLE);
-        const recommendationTwoPart = recommendationGeneral
-          .filter((recommend, index) => index < NUMBER_VISIBLE * NUMBER_VISIBLE
-          && index >= NUMBER_VISIBLE);
-        const recommendationThreePart = recommendationGeneral
-          .filter((recommend, index) => index >= NUMBER_VISIBLE * NUMBER_VISIBLE
-          && index < NUMBER_RECOMMENDED);
-        setRecommendationDetail([recommendationOnePart,
-          recommendationTwoPart, recommendationThreePart]);
-      } else {
-        const recommendationResponse = await performFetchRecommendation('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-        const recommendationGeneral = recommendationResponse.meals
-          .filter((recommend, index) => index < NUMBER_RECOMMENDED)
-          .map((recommend, index) => ({ ...recommend, recipeId: index }));
-        const recommendationOnePart = recommendationGeneral
-          .filter((recommend, index) => index < NUMBER_VISIBLE);
-        const recommendationTwoPart = recommendationGeneral
-          .filter((recommend, index) => index < NUMBER_VISIBLE * NUMBER_VISIBLE
-          && index >= NUMBER_VISIBLE);
-        const recommendationThreePart = recommendationGeneral
-          .filter((recommend, index) => index >= NUMBER_VISIBLE * NUMBER_VISIBLE
-          && index < NUMBER_RECOMMENDED);
-        setRecommendationDetail([recommendationOnePart,
-          recommendationTwoPart, recommendationThreePart]);
-      }
-    };
     if (pathname.includes('/meals')) {
       didMountFetch('https://www.themealdb.com/api/json/v1/1/lookup.php?i=', id);
     } else {
@@ -79,28 +59,12 @@ function RecipeDetails() {
     const doneRecipesArray = getLocalStorage('doneRecipes') || [];
     setConditionStartRecipe(!doneRecipesArray.some((recipe) => recipe.id === id));
     checkInProgressRecipe();
+    checkLocalStorage();
   }, []);
-  if (Object.keys(receipeDetail).length !== 0 && receipeDetail.meals) {
-    const measureArray = (Object.entries(receipeDetail.meals[0]))
-      .filter((chave) => chave[0].includes('strMeasure')).filter((valor) => valor[1]);
-    const measureValue = measureArray.map((measure) => measure[1]);
-    const ingredients = (Object.entries(receipeDetail.meals[0]))
-      .filter((chave) => chave[0].includes('strIngredient'))
-      .filter((_receipe, index) => index < measureArray.length)
-      .map((ingredient) => ingredient[1]);
-    ingredientGlobal = ingredients;
-    measureGlobal = measureValue;
-  } else if (Object.keys(receipeDetail).length !== 0 && receipeDetail.drinks) {
-    const measureArray = (Object.entries(receipeDetail.drinks[0]))
-      .filter((chave) => chave[0].includes('strMeasure')).filter((valor) => valor[1]);
-    const measureValue = measureArray.map((measure) => measure[1]);
-    const ingredients = (Object.entries(receipeDetail.drinks[0]))
-      .filter((chave) => chave[0].includes('strIngredient'))
-      .filter((_receipe, index) => index < measureArray.length)
-      .map((ingredient) => ingredient[1]);
-    ingredientGlobal = ingredients;
-    measureGlobal = measureValue;
-  }
+  useEffect(() => {
+    construcaoIngredientesArray();
+    checkLocalStorage();
+  }, [receipeDetail]);
   console.log('receipeDetail final', receipeDetail);
   return (
     <div>
@@ -217,7 +181,34 @@ function RecipeDetails() {
           ))}
         </Carousel>
       )}
-      <DetailsButtons state={ { receipeDetail } } />
+      {copied && <p>Link copied!</p>}
+      <button
+        type="button"
+        onClick={ handleShare }
+      >
+        <img data-testid="share-btn" src={ shareIcon } alt="Compartilhar" />
+      </button>
+
+      <button
+        type="button"
+        // data-testid="favorite-btn"
+        onClick={ handleSaveStorage }
+        src={ favorite ? blackHeartIcon : whiteHeartIcon }
+      >
+        {favorite ? (
+          <img
+            data-testid="favorite-btn"
+            src={ blackHeartIcon }
+            alt="Favorito"
+          />)
+          : (
+            <img
+              data-testid="favorite-btn"
+              src={ whiteHeartIcon }
+              alt="Não Favorito"
+            />
+          )}
+      </button>
       {conditionStartRecipe && (
         <button
           className="Start-Recipe-detail"
