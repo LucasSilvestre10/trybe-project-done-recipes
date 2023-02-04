@@ -86,7 +86,6 @@ function useFetch() {
     const response = await (await fetch(`https://www.${domain}db.com/api/json/v1/1/list.php?c=list`)).json();
     const key = page.replace('/', '');
     const result = response[key];
-    console.log('result de filtros', result);
     const newResult = [];
     const MAX_LENG = 5;
     for (let index = 0; index < MAX_LENG; index += 1) {
