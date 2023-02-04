@@ -65,7 +65,6 @@ function RecipeDetails() {
     construcaoIngredientesArray();
     checkLocalStorage();
   }, [receipeDetail]);
-  console.log('receipeDetail final', receipeDetail);
   return (
     <div>
       {(pathname.includes('/meals') && Object.keys(receipeDetail).length !== 0) && (

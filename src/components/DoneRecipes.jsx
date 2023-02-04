@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import copy from 'clipboard-copy';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../hooks/useLocalStorage';
 import shareIcon from '../images/shareIcon.svg';
+import '../css/Recipes.css';
 
 const doneRecipes = [
   {
@@ -32,16 +33,17 @@ const doneRecipes = [
 
 // chave do local 'doneRecipes'
 function DoneRecipes() {
-  const { pathname } = useLocation();
   const [listCompletedRecipes, setListCompletedRecipes] = useState([]);
   const [idShare, setIdShare] = useState();
   // const [filtersCategory, setFiltersCategory] = useState()
   const { getLocalStorage } = useLocalStorage();
+  const history = useHistory();
 
   useEffect(() => {
     localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
     const result = getLocalStorage('doneRecipes');
-    console.log(result);
+    // console.log('result in useEffect', result);
+
     setListCompletedRecipes(result);
   }, []);
 
@@ -51,28 +53,78 @@ function DoneRecipes() {
     setIdShare(id);
   };
 
+  const setFilters = (event) => {
+    const { value } = event.target;
+    const ListStorage = getLocalStorage('doneRecipes');
+
+    let newList = [];
+
+    if (value === 'Meals') {
+      newList = ListStorage.filter((recipe) => recipe.type === 'meal');
+    }
+    if (value === 'Drinks') {
+      newList = ListStorage.filter((recipe) => recipe.type === 'drink');
+    }
+    if (value === 'All') {
+      newList = ListStorage;
+    }
+    // console.log('console newList', newList);
+    setListCompletedRecipes(newList);
+  };
+
+  const goToDetails = (event) => {
+    const { id } = event.currentTarget;
+    history.push(`/${id}`);
+  };
+
   return (
     <div>
-      <button data-testid="filter-by-all-btn">All</button>
-      <button data-testid="filter-by-meal-btn">Meals</button>
-      <button data-testid="filter-by-drink-btn">Drinks</button>
+      <button
+        value="All"
+        onClick={ setFilters }
+        data-testid="filter-by-all-btn"
+      >
+        All
 
-      {/* {
-        listCompletedRecipes === []
-       && <p>Nenhuma Receita concluída encontrada!</p>
-      } */}
+      </button>
+      <button
+        value="Meals"
+        onClick={ setFilters }
+        data-testid="filter-by-meal-btn"
+      >
+        Meals
+
+      </button>
+      <button
+        value="Drinks"
+        onClick={ setFilters }
+        data-testid="filter-by-drink-btn"
+      >
+        Drinks
+
+      </button>
+
       {listCompletedRecipes.map((recipe, index) => (
-        <div key={ index }>
-          <img
-            data-testid={ `${index}-horizontal-image` }
-            src={ recipe.image }
-            alt={ recipe.name }
-          />
-          <p
-            data-testid={ `${index}-horizontal-name` }
+        <div
+          key={ index }
+          className="recipes-container"
+        >
+          <button
+            id={ `${recipe.type}s/${recipe.id}` }
+            onClick={ goToDetails }
           >
-            {recipe.name}
-          </p>
+            <img
+              className="recipes-img"
+              data-testid={ `${index}-horizontal-image` }
+              src={ recipe.image }
+              alt={ recipe.name }
+            />
+            <p
+              data-testid={ `${index}-horizontal-name` }
+            >
+              {recipe.name}
+            </p>
+          </button>
           <p
             data-testid={ `${index}-horizontal-top-text` }
           >

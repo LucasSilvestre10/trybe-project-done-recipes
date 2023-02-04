@@ -77,7 +77,7 @@ function RecipeDetailsProvider({ children }) {
   const handleSaveStorage = () => {
     if (favorite) {
       const oldStorage = getLocalStorage('favoriteRecipes');
-      console.log(receipeDetail.drinks);
+
       if (receipeDetail.meals) {
         const newStorage = oldStorage
           .filter(({ id }) => id !== receipeDetail.meals[0].idMeal);
@@ -85,7 +85,7 @@ function RecipeDetailsProvider({ children }) {
       } else if (receipeDetail.drinks) {
         const newStorage = oldStorage
           .filter(({ id }) => id !== receipeDetail.drinks[0].idDrink);
-        console.log(newStorage);
+
         setLocalStorage('favoriteRecipes', newStorage);
       }
       setFavorite(false);
